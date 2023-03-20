@@ -24,7 +24,7 @@ jobs:
           echo $today
 
           echo 'Fetch all PRs'
-          prs=$(gh projects item-list $PROJECT_ID --org $ORG_ID --format json | jq '[.[] | select(.Status != "Done" and ."Release date" != null and .content.TypeName == "PullRequest" and ."Release date" == "'"$today"'")]' -c)
+          prs=$(gh projects item-list $PROJECT_ID --org $ORG_ID --format json | jq '[.items[] | select(.status != "Done" and ."release date" != null and .content.type == "PullRequest" and ."release date" == "'"$today"'")]' -c)
 
           echo $prs
           numberOfElements=$(echo $prs | jq '. | length')
@@ -33,7 +33,7 @@ jobs:
             echo "No PRs to check" >> $GITHUB_STEP_SUMMARY
           else
             echo 'List PR numbers'
-            prNumbers=$(echo $prs | jq '[.[].content.Number]' -c)
+            prNumbers=$(echo $prs | jq '[.[].content.number]' -c)
 
             echo $prNumbers
 
@@ -57,10 +57,10 @@ jobs:
           ref: main
       - name: Merge PR
         run: |
-          pr=$(echo '${{ needs.find_prs.outputs.prs }}' | jq 'select(.[] | select(.content.Number == ${{ matrix.prNumbers }}))' -c)
+          pr=$(echo '${{ needs.find_prs.outputs.prs }}' | jq 'select(.[] | select(.content.number == ${{ matrix.prNumbers }}))' -c)
 
-          prTitle=$(echo $pr | jq '.[].content.Title')
-          prNumber=$(echo $pr | jq '.[].content.Number')
+          prTitle=$(echo $pr | jq '.[].content.title')
+          prNumber=$(echo $pr | jq '.[].content.number')
 
           prDetail=$(gh pr view $prNumber --json files,headRefName,url)
           branch=$(echo $prDetail | jq '.headRefName')
