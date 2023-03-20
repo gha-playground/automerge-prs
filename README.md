@@ -1,5 +1,8 @@
 # Automerge PRs
 
+> ***Note***
+> It's not the same as [Automatically Merging a PR](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/incorporating-changes-from-a-pull-request/automatically-merging-a-pull-request)
+
 This is an example about using GitHub CLI, Projects and Actions to review PRs with certain criteria and automatically merge them given a `Release date` field.
 
 ## How this works?
